@@ -1,9 +1,10 @@
 import { Worker } from "bullmq";
 import { Submission } from "./submission.model";
+import { config } from "../../config/config";
 
 export const evaluationWorker = new Worker(
   "evaluation",
-  async job => {
+  async (job) => {
     const { submissionId, code } = job.data;
 
     // simulação de avaliação
@@ -11,13 +12,18 @@ export const evaluationWorker = new Worker(
 
     await Submission.findByIdAndUpdate(submissionId, {
       score,
-      status: "done"
+      status: "done",
     });
   },
   {
     connection: {
-      host: "localhost",
-      port: 6379
-    }
+      host: config.redis.host,
+      port: config.redis.port,
+      maxRetriesPerRequest: null
+    },
   }
 );
+
+evaluationWorker.on("error", (err) => {
+  // Apenas loga o erro para não derrubar o processo
+});

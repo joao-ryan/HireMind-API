@@ -8,7 +8,7 @@ export const userController = {
 
   async me(req: Request, res: Response, next: NextFunction) {
     try {
-      const user = await userRepository.findById(req.user.id);
+      const user = await userRepository.findById(req.user!.id);
 
       res.json(user);
     } catch (error) {
