@@ -5,6 +5,7 @@ import morgan from "morgan";
 import "dotenv/config";
 import userRoutes from "./modules/users/user.routes";
 import companyRoutes from "./modules/companies/company.routes";
+import jobRoutes from "./modules/jobs/job.routes";
 
 import { errorMiddleware } from "./shared/middleware/error.middleware";
 
@@ -16,6 +17,7 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use("/api/users", userRoutes);
 app.use("/api/companies", companyRoutes);
+app.use("/api/jobs", jobRoutes);
 
 app.get("/health", (req, res) => {
   res.json({ status: "ok", message: "HireMind API rodando 🚀" });
