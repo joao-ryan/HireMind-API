@@ -1,12 +1,12 @@
 import { Request, Response, NextFunction } from "express";
 import { userService } from "./user.service";
 import { registerSchema, loginSchema } from "./user.dto";
-import { authMiddleware } from "../../shared/middleware/auth.middleware";
+import { AuthRequest } from "../../shared/middleware/auth.middleware";
 import { userRepository } from "./user.repository";
 
 export const userController = {
 
-  async me(req: Request, res: Response, next: NextFunction) {
+  async me(req: AuthRequest, res: Response, next: NextFunction) {
     try {
       const user = await userRepository.findById(req.user!.id);
 
@@ -15,6 +15,7 @@ export const userController = {
       next(error);
     }
   },
+
   async register(req: Request, res: Response, next: NextFunction) {
     try {
       const data = registerSchema.parse(req.body);

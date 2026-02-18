@@ -27,7 +27,9 @@ export const jobController = {
 
   async listByCompany(req: Request, res: Response, next: NextFunction) {
     try {
-      const jobs = await jobService.listByCompany(req.params.companyId);
+      const companyId = String(req.params.companyId);
+
+      const jobs = await jobService.listByCompany(companyId);
       res.json(jobs);
     } catch (error) {
       next(error);
