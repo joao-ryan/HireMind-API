@@ -31,7 +31,7 @@ export const companyController = {
 
   async getById(req: AuthRequest, res: Response, next: NextFunction) {
     try {
-      const id = String(req.params.id);
+      const id = req.params.id as string;
 
       const company = await companyService.getById(
         id,

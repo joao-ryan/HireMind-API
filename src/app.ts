@@ -22,11 +22,11 @@ app.use("/api/companies", companyRoutes);
 app.use("/api/jobs", jobRoutes);
 app.use("/api/submissions", submissionRoutes);
 
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.get("/health", (req, res) => {
   res.json({ status: "ok", message: "HireMind API rodando 🚀" });
 });
 app.use(errorMiddleware);
 
-export { app };
+export default app;

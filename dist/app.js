@@ -1,0 +1,32 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const cors_1 = __importDefault(require("cors"));
+const helmet_1 = __importDefault(require("helmet"));
+const morgan_1 = __importDefault(require("morgan"));
+require("dotenv/config");
+const user_routes_1 = __importDefault(require("./modules/users/user.routes"));
+const company_routes_1 = __importDefault(require("./modules/companies/company.routes"));
+const job_routes_1 = __importDefault(require("./modules/jobs/job.routes"));
+const submission_routes_1 = __importDefault(require("./modules/submissions/submission.routes"));
+const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
+const swagger_1 = require("./config/docs/swagger");
+const error_middleware_1 = require("./shared/middleware/error.middleware");
+const app = (0, express_1.default)();
+app.use((0, cors_1.default)());
+app.use((0, helmet_1.default)());
+app.use((0, morgan_1.default)("dev"));
+app.use(express_1.default.json());
+app.use("/api/users", user_routes_1.default);
+app.use("/api/companies", company_routes_1.default);
+app.use("/api/jobs", job_routes_1.default);
+app.use("/api/submissions", submission_routes_1.default);
+app.use("/api-docs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_1.swaggerSpec));
+app.get("/health", (req, res) => {
+    res.json({ status: "ok", message: "HireMind API rodando 🚀" });
+});
+app.use(error_middleware_1.errorMiddleware);
+exports.default = app;

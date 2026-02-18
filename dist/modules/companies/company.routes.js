@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const company_controller_1 = require("./company.controller");
+const auth_middleware_1 = require("../../shared/middleware/auth.middleware");
+const role_middleware_1 = require("../../shared/middleware/role.middleware");
+const router = (0, express_1.Router)();
+router.post("/", auth_middleware_1.authMiddleware, (0, role_middleware_1.roleMiddleware)(["RECRUITER"]), company_controller_1.companyController.create);
+router.get("/my", auth_middleware_1.authMiddleware, (0, role_middleware_1.roleMiddleware)(["RECRUITER"]), company_controller_1.companyController.myCompanies);
+router.get("/:id", auth_middleware_1.authMiddleware, (0, role_middleware_1.roleMiddleware)(["RECRUITER"]), company_controller_1.companyController.getById);
+exports.default = router;

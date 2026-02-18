@@ -1,15 +1,27 @@
-import { User, IUser } from "./user.model";
+import { IUser } from "./user.model";
+import { db } from "../../shared/storage";
+import crypto from "crypto";
 
 export const userRepository = {
   async create(data: Partial<IUser>) {
-    return User.create(data);
+    const newUser: IUser = {
+      _id: crypto.randomUUID(),
+      name: data.name!,
+      email: data.email!,
+      password: data.password!,
+      role: data.role || "CANDIDATE",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+    db.users.push(newUser);
+    return newUser;
   },
 
   async findByEmail(email: string) {
-    return User.findOne({ email });
+    return db.users.find((user) => user.email === email) || null;
   },
 
   async findById(id: string) {
-    return User.findById(id);
+    return db.users.find((user) => user._id === id) || null;
   }
 };

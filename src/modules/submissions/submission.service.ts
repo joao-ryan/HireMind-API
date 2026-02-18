@@ -1,23 +1,32 @@
 import { submissionRepository } from "./submission.repository";
-import { evaluationQueue } from "./evaluation.queue";
+import { AppError } from "../../shared/errors/AppError";
 
 export const submissionService = {
   async create(data: any, candidateId: string) {
+    // Prevent duplicate applications
+    const existingSubmission = await submissionRepository.findByUserAndJob(
+      candidateId,
+      data.jobId
+    );
+
+    if (existingSubmission) {
+      throw new AppError("Você já se candidatou para esta vaga", 400);
+    }
+
+    // Simulação de avaliação imediata
+    const score = Math.min(100, data.code.length);
+
     const submission = await submissionRepository.create({
       ...data,
       candidateId,
-      status: "pending"
-    });
-
-    await evaluationQueue.add("evaluate", {
-      submissionId: submission._id,
-      code: submission.code
+      score,
+      status: "done",
     });
 
     return submission;
   },
 
   async getRanking(jobId: string) {
-    return submissionRepository.findByJob(jobId);
+    return submissionRepository.findByJobId(jobId);
   }
 };

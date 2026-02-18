@@ -10,7 +10,7 @@ export const jobService = {
       throw new AppError("Empresa não encontrada", 404);
     }
 
-    if (company.recruiterId.toString() !== recruiterId) {
+    if (company.recruiterId !== recruiterId) {
       throw new AppError("Você não pode criar vagas para essa empresa", 403);
     }
 
@@ -24,6 +24,6 @@ export const jobService = {
   },
 
   async listByCompany(companyId: string) {
-    return jobRepository.findByCompany(companyId);
+    return jobRepository.findByCompanyId(companyId);
   }
 };

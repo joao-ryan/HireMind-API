@@ -12,7 +12,7 @@ export const companyService = {
   },
 
   async getMyCompanies(recruiterId: string) {
-    return companyRepository.findByRecruiter(recruiterId);
+    return companyRepository.findByUserId(recruiterId);
   },
 
   async getById(id: string, recruiterId: string) {
@@ -22,7 +22,7 @@ export const companyService = {
       throw new AppError("Empresa não encontrada", 404);
     }
 
-    if (company.recruiterId.toString() !== recruiterId) {
+    if (company.recruiterId !== recruiterId) {
       throw new AppError("Sem permissão para acessar essa empresa", 403);
     }
 

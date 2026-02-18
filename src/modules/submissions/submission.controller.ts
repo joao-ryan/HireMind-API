@@ -21,7 +21,7 @@ export const submissionController = {
 
   async ranking(req: AuthRequest, res: Response, next: NextFunction) {
     try {
-      const jobId = String(req.params.jobId);
+      const jobId = req.params.jobId as string;
 
       const ranking = await submissionService.getRanking(jobId);
 

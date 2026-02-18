@@ -1,22 +1,8 @@
-import { Schema, model, Document, Types } from "mongoose";
-
-export interface ICompany extends Document {
+export interface ICompany {
+  _id: string;
   name: string;
   description?: string;
-  recruiterId: Types.ObjectId;
+  recruiterId: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
-
-const companySchema = new Schema<ICompany>(
-  {
-    name: { type: String, required: true },
-    description: String,
-    recruiterId: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
-      required: true
-    }
-  },
-  { timestamps: true }
-);
-
-export const Company = model<ICompany>("Company", companySchema);

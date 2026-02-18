@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import { AppError } from "../errors/AppError";
+import { db } from "../storage";
 
 interface TokenPayload {
   id: string;
@@ -27,8 +28,15 @@ export const authMiddleware = (
   try {
     const decoded = jwt.verify(
       token,
-      process.env.JWT_SECRET as string
+      process.env.JWT_SECRET || "supersecret"
     ) as TokenPayload;
+
+    // Read user from in-memory storage
+    const userExists = db.users.some((user) => user._id === decoded.id);
+
+    if (!userExists) {
+      throw new AppError("Usuário não encontrado", 401);
+    }
 
     req.user = decoded;
 

@@ -27,7 +27,7 @@ export const jobController = {
 
   async listByCompany(req: Request, res: Response, next: NextFunction) {
     try {
-      const companyId = String(req.params.companyId);
+      const companyId = req.params.companyId as string;
 
       const jobs = await jobService.listByCompany(companyId);
       res.json(jobs);
